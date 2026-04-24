@@ -1,0 +1,48 @@
+{
+  "packages": [
+    {
+      "id": "Microsoft.WindowsTerminal.Preview",
+      "name": "Windows Terminal Preview"
+    },
+    {
+      "id": "Starship.Starship",
+      "name": "Starship"
+    },
+    {
+      "id": "Microsoft.PowerShell",
+      "name": "PowerShell"
+    },
+    {
+      "id": "eza-community.eza",
+      "name": "eza"
+    },
+    {
+      "id": "astral-sh.uv",
+      "name": "uv"
+    },
+    {
+      "id": "Schniz.fnm",
+      "name": "fnm"
+    },
+    {
+      "id": "sharkdp.fd",
+      "name": "fd"
+    },
+    {
+      "id": "Git.Git",
+      "name": "Git"
+    },
+    {
+      "id": "junegunn.fzf",
+      "name": "fzf"
+    },
+    {
+      "id": "ajeetdsouza.zoxide",
+      "name": "zoxide"
+    },
+    {
+      "id": "FxSound.FxSound",
+      "name": "FxSound"
+    }
+  ]
+}

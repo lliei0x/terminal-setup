@@ -1,6 +1,6 @@
-# Arch-Terminal
+# Terminal Setup
 
-面向 **Arch Linux** 与 **WSL Arch** 的终端环境安装脚本。参考 [terminal-setup](https://github.com/lewislulu/terminal-setup)
+面向 **Arch Linux**、**WSL Arch** 与 **原生 Windows** 的终端环境安装脚本。参考 [terminal-setup](https://github.com/lewislulu/terminal-setup)
 
 ## 支持平台
 
@@ -8,7 +8,7 @@
 | --- | --- | --- |
 | WSL Arch | 主维护平台 | 推荐场景 |
 | 原生 Arch Linux | 完整支持 | 次要场景 |
-| 原生 Windows | 不支持 | 请先进入 WSL Arch |
+| 原生 Windows | 支持 | 通过 PowerShell + winget 安装 |
 | 其他 Linux / macOS | 不支持 | 项目不维护这些平台 |
 
 ## 快速开始
@@ -16,7 +16,6 @@
 ### WSL Arch
 
 ```bash
-git clone https://github.com/lewislulu/terminal-setup.git
 cd terminal-setup
 ./setup.sh --dry-run --fish
 ./setup.sh --fish
@@ -25,11 +24,52 @@ cd terminal-setup
 ### 原生 Arch Linux
 
 ```bash
-git clone https://github.com/lewislulu/terminal-setup.git
 cd terminal-setup
 ./setup.sh --dry-run --zsh
 ./setup.sh --zsh
 ```
+
+### 原生 Windows
+
+使用 PowerShell 运行 Windows bootstrap。首次执行建议先 dry-run，确认会执行的 winget 安装与配置部署步骤：
+
+```powershell
+cd terminal-setup
+.\setup.ps1 -DryRun
+.\setup.ps1
+```
+
+可选跳过部分步骤：
+
+```powershell
+.\setup.ps1 -SkipPackages
+.\setup.ps1 -SkipProfile
+```
+
+Windows 脚本会通过 `winget` 安装以下包：
+
+| winget ID | 说明 |
+| --- | --- |
+| `Microsoft.WindowsTerminal.Preview` | Windows Terminal Preview |
+| `Starship.Starship` | 跨 Shell 提示符 |
+| `Microsoft.PowerShell` | PowerShell |
+| `eza-community.eza` | `ls` 替代 |
+| `astral-sh.uv` | Python 工具链 |
+| `Schniz.fnm` | Node 版本管理 |
+| `sharkdp.fd` | `find` 替代 |
+| `Git.Git` | Git |
+| `junegunn.fzf` | 模糊查找 |
+| `ajeetdsouza.zoxide` | 智能目录跳转 |
+| `FxSound.FxSound` | Windows 音频增强 |
+
+PowerShell 配置会做这些事：
+
+- 部署 `configs/starship.toml` 到 `~/.config/starship.toml`
+- 将 `configs/windows/Microsoft.PowerShell_profile.ps1` 复制到 `$PROFILE`
+- 如果 `$PROFILE` 已存在，直接覆盖；如果不存在，创建目录后复制
+- 初始化 `starship`、`fnm`、`zoxide`、`fzf`
+- 配置 `ls`、`ll`、`lt`、`cat`、`find`、`cd` 等函数
+- 对 PSReadLine 预测、历史和快捷键做非交互环境保护，避免重定向或自动化执行时报错
 
 ## 可选参数
 
@@ -39,16 +79,24 @@ cd terminal-setup
 ./setup.sh --dry-run
 ```
 
+Windows 参数：
+
+```powershell
+.\setup.ps1 -DryRun
+.\setup.ps1 -SkipPackages
+.\setup.ps1 -SkipProfile
+```
+
 ## 安装内容
 
 1. 初始化 `pacman-key`、执行系统更新、手动切换中国镜像源，并使用 `reflector` 生成中国镜像列表后安装基础依赖
-2. 在原生 Arch 上安装 Ghostty，WSL Arch 仅提示 Windows 侧终端方案
+2. 在原生 Arch 上安装 Ghostty，WSL Arch 仅提示 Windows 侧终端方案，原生 Windows 安装 Windows Terminal Preview
 3. 安装 Fish 或 Zsh
 4. 安装 CLI 工具：`bat`、`eza`、`fd`、`ripgrep`、`jq`、`fzf`、`btop`、`zoxide`、`tealdeer`、`git-delta`、`lazygit`
 5. 安装 `starship`
 6. 可选安装 `fnm` 与 Node.js LTS
 7. 可选安装 `zellij`
-8. 部署 Fish / Zsh / Ghostty / Starship 配置
+8. 部署 Fish / Zsh / Ghostty / Starship 配置；原生 Windows 部署 Starship 与 PowerShell Profile 配置文件
 
 ## 选择你的 Shell
 
